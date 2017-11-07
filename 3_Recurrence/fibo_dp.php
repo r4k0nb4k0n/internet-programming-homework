@@ -1,31 +1,47 @@
-/* 2017-2 Internet Programming
- * Fibonacci Function Recursive Implementation - Dynamic Programming
- * Written by Choe Hyeong Jin, Dept. of CSE, Univ. of Seoul
- */
+<meta charset="UTF-8"/>
 
 <?PHP
-	global $memo;
-	$memo = array();
 
-	function fibo_td($x, &$memo){	
-		// base condition
-		if( $x == 1 || $x == 2 ) return 1;
-
-		// Memoization
-		if( $memo[$x] != -1 ) return $memo[$x];
-
-		// Ignition
-		$memo[$x] = fibo_td($x-1, $memo) + fibo_td($x-2, $memo);
-		return $memo[$x];
+	function get_time()
+	{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
 	}
 
-	$max = 10000;
-	for($i=0;$i<$max;$i++){
-		$memo[$i] = -1;
+	$memoize = function($func)
+	{
+	    return function() use ($func)
+	    {
+	        static $cache = [];
+	
+	        $args = func_get_args();
+	        $key = md5(serialize($args));
+	
+    	    if ( ! isset($cache[$key])) {
+    	        $cache[$key] = call_user_func_array($func, $args);
+    	    }
+
+ 	       return $cache[$key];
+	    };
+	};
+
+	$fibonacci = $memoize(function($n) use (&$fibonacci)
+	{
+		return ($n < 2) ? $n : $fibonacci($n - 1) + $fibonacci($n - 2);
+	});
+	
+	$start = get_time();
+	
+	for($z = 0; $z<=269; $z++) // 이 부분을 수정해서 계산하세요
+	{
+		$p = $fibonacci($z);
+		print "fibo_dp(".$z.") = ".$p."
+";
 	}
-
-	$x = 10;
-	$answer = fibo_td($x, $memo);
-
-	echo 'fibo_td('.$x.')='.$answer;
+	
+	$end = get_time();
+	$time = $end - $start;
+	echo '
+'.$time.'초 걸림
+';
 ?>
