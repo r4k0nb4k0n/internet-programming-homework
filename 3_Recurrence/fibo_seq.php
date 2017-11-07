@@ -16,7 +16,7 @@
 	
 	$start = get_time();
 	
-	for($z = 0; $z<=269; $z++) // 이 부분을 수정해서 계산하세요
+	for($z = 0; $z<=35; $z++) // 이 부분을 수정해서 계산하세요
 	{
 		$p = fibo_math($z);
 		print "fibo_math(".$z.") = ".$p."
